@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.jimbo.core.dao.product.ColorDao">
+	<resultMap type="Color" id="color">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="imgUrl" column="img_url" />
+		<result property="parentId" column="parent_id" />
+	</resultMap>
+	<sql id="colorSelect">
+		select
+		<if test="fields != null">
+			${fields}
+		</if>
+		<if test="fields == null">
+			id,name,img_url,parent_id
+		</if>
+		from bbs_color
+	</sql>
+	<sql id="colorWhere">
+		<where>
+			<if test="id != null">
+				id=#{id}
+			</if>
+			<if test="parentId != null">
+				and parent_id != #{parentId}
+			</if>
+		</where>
+	</sql>
+	<sql id="colorOrder">
+		<if test="orderfields != null and orderfields.size >0">
+			order by
+			<foreach collection="orderfields" item="orderfield"
+				separator=",">
+				${orderfield.field} ${orderfield.order}
+			</foreach>
+		</if>
+	</sql>
+	<sql id="colorLimit">
+		<if test="startRow !=null">
+			limit #{startRow},#{pageSize}
+		</if>
+	</sql>
+	<select id="getAllColors" resultMap="color" parameterType="ColorQuery">
+		<include refid="colorSelect" />
+		<include refid="colorWhere"/>
+	</select>
+</mapper>

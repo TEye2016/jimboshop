@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.jimbo.core.dao.product.TypeDao">
+	<resultMap type="Type" id="type">
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="parent_id" property="parentId" />
+		<result column="note" property="note" />
+		<result column="is_display" property="isDisplay" />
+	</resultMap>
+	<sql id="selector">
+		select
+		<if test="fields != null">
+			${fields}
+		</if>
+		<if test="fields == null">
+			id,name,parent_id,note,is_display
+		</if>
+		from bbs_type
+	</sql>
+	<sql id="selectWhere">
+		<where>
+			<if test="name != null">
+				name=#{name}
+			</if>
+			<if test="id != null">
+				and id=#{id}
+			</if>
+			<if test="parentId != null">
+				and parent_id=#{parentId}
+			</if>
+			<if test="note !=null">
+				<if test="noteLike==false">
+					and note=#{note}
+				</if>
+				<if test="noteLike == true">
+					and note like "%"#{note}"%"
+				</if>
+			</if>
+			<if test="isDisplay != null">
+				and is_display!=#{isDisplay}
+			</if>
+		</where>
+	</sql>
+	<sql id="selectLimit">
+		<if test="startRow != null">
+		limit #{startRow},#{pageSize}
+		</if>
+	</sql>
+	<select id="types" parameterType="TypeQuery" resultMap="type">
+		<include refid="selector"/>
+		<include refid="selectWhere"/>
+		<include refid="selectLimit"/>
+	</select>
+</mapper>

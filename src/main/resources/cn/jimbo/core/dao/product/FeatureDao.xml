@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.jimbo.core.dao.product.FeatureDao">
+	<resultMap type="Feature" id="feature">
+		<id property="id" column="id" />
+		<result property="value" column="value" />
+		<result property="name" column="name" />
+		<result property="sort" column="sort" />
+		<result property="isDel" column="is_del" />
+	</resultMap>
+	<sql id="selector">
+		select
+		<if test="fields != null">
+			${fields}
+		</if>
+		<if test="fields == null">
+			id,name,value,sort,is_del
+		</if>
+		from bbs_feature
+	</sql>
+	<sql id="selectWhere">
+		<where>
+			<if test="id != null">
+			id=#{id}
+			</if>
+			<if test="isDel != null">
+				and is_del !=#{isDel}
+			</if>
+		</where>
+	</sql>
+	<sql id="selectLimit">
+		<if test="startRow != null">
+		limit #{startRow}, #{pageSize},
+		</if>
+	</sql>
+	<sql id="selectOrder">
+		<if test="orderFields != null and orderFields.size > 0">
+			order by 
+			<foreach collection="orderFields" separator="," item="orderField">
+				${orderField.field} ${orderField.order}
+			</foreach>
+		</if>
+	</sql>
+	<select id="getAllFeatures" parameterType="FeatureQuery"
+		resultMap="feature">
+		<include refid="selector"/>
+		<include refid="selectWhere"/>
+		<include refid="selectOrder"/>
+	</select>
+</mapper>

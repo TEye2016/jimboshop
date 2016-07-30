@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.jimbo.core.dao.product.ImgDao">
+	<resultMap type="Img" id="img">
+		<id column="id" property="id"/>
+		<result column="product_id" property="productId"/>
+		<result column="url" property="url"/>
+		<result column="is_def" property="isDef"/>
+	</resultMap>
+	<sql id="selector">
+		select
+		<if test="fields != null">
+		${fields}
+		</if>
+		<if test="fields ==null">
+			id,product_id,url,is_def
+		</if>
+		from bbs_img
+	</sql>
+	<sql id="imgWhere">
+		<where>
+			<if test=""></if>
+		</where>
+	</sql>
+</mapper>
